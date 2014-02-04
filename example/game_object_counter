@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+var muninPlugin = require('../');
+var main = function(){
+    muninPlugin(function(g){
+        return g.normalScale('game object count','count','game');
+    },function(act){
+        return act
+         .define('player','LINE2','GAUGE')
+         .define('monster','LINE2','GAUGE')
+         .define('npc','LINE2','GAUGE')
+         .end();
+    },function(callback){
+         callback({
+             player:100,
+             monster:256,
+             npc:5,
+         });
+    });
+}
+main()
