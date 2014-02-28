@@ -6,6 +6,6 @@ var main = function(){
     g.add(new munin.Model.Default('monster').setValue(256));
     g.add(new munin.Model.Default('npc').setValue(5));
     g.sortValue();
-    munin.createAgent(g);
+    munin.create(g);
 }
 main();

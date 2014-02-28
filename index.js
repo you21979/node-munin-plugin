@@ -1,3 +1,3 @@
-exports.createAgent = require('./lib/main');
+exports.create = require('./lib/main');
 exports.Graph = require('./lib/graph');
 exports.Model = require('./lib/model');
