@@ -1,20 +1,11 @@
 #!/usr/bin/env node
-var muninPlugin = require('../');
+var munin = require('../');
 var main = function(){
-    muninPlugin(function(g){
-        return g.normalScale('game object count','count','game');
-    },function(act){
-        return act
-         .define('player','LINE2','GAUGE')
-         .define('monster','LINE2','GAUGE')
-         .define('npc','LINE2','GAUGE')
-         .end();
-    },function(callback){
-         callback({
-             player:100,
-             monster:256,
-             npc:5,
-         });
-    });
+    var g = new munin.Graph('game object count','count','game');
+    g.add(new munin.Model.Default('player').setValue(100));
+    g.add(new munin.Model.Default('monster').setValue(256));
+    g.add(new munin.Model.Default('npc').setValue(5));
+    g.sortValue();
+    munin.createAgent(g);
 }
-main()
+main();
