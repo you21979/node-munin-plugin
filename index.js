@@ -1,8 +1,9 @@
-exports.create = require('./lib/main');
-exports.Graph = require('./lib/graph');
-exports.Model = require('./lib/model');
+var munin = exports;
+munin.create = require('./lib/main');
+munin.Graph = require('./lib/graph');
+munin.Model = require('./lib/model');
 var fs = require('fs');
-exports.jsonFileRead = function(filename, callback){
+munin.jsonFileRead = function(filename, callback){
     fs.readFile(filename, 'utf-8', function(err, val){
         if(err){
             return callback(err, val);
@@ -15,3 +16,16 @@ exports.jsonFileRead = function(filename, callback){
         }
     });
 };
+var modelmap = {
+    'default': munin.Model.Default,
+    'counter': munin.Model.Counter,
+    'temperature': munin.Model.Temperature,
+    'rate': munin.Model.Rate,
+};
+munin.selectModel = function(opt){
+    var Model = munin.Model.Default;
+    if(opt in modelmap){
+         Model = modelmap[opt];
+    }
+    return Model;
+}
