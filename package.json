@@ -1,7 +1,7 @@
 {
   "author": "Yuki Akiyama <you2197901 [at] gmail.com>",
   "name": "munin-plugin",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "dependencies": {
   },
