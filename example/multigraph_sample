@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+var munin = require('../');
+var main = function(){
+    var list = [];
+    var g = new munin.Graph('game object count','count','game');
+    g.add(new munin.Model.Default('player').setValue(100));
+    g.add(new munin.Model.Default('monster').setValue(256));
+    g.add(new munin.Model.Default('npc').setValue(5));
+    g.sortValue();
+    list.push(g);
+    var g = new munin.Graph('game map player count','count','game');
+    g.add(new munin.Model.Default('area1').setValue(33));
+    g.add(new munin.Model.Default('area2').setValue(29));
+    g.add(new munin.Model.Default('area3').setValue(1));
+    g.sortValue();
+    list.push(g);
+    munin.create(list);
+}
+main();
