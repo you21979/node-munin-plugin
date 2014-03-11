@@ -20,7 +20,8 @@ munin.getScriptName = function(){
     if(process.argv.length === 1){
         return 'noscript';
     };
-    return process.argv[1];
+    var pathlist = process.argv[1].split('/');
+    return pathlist[pathlist.length - 1];
 };
 var modelmap = {
     'default': munin.Model.Default,
