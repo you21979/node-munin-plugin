@@ -16,6 +16,12 @@ munin.jsonFileRead = function(filename, callback){
         }
     });
 };
+munin.getScriptName = function(){
+    if(process.argv.length === 1){
+        return 'noscript';
+    };
+    return process.argv[1];
+};
 var modelmap = {
     'default': munin.Model.Default,
     'counter': munin.Model.Counter,
