@@ -21,7 +21,7 @@ munin.getScriptName = function(){
         return 'noscript';
     };
     var pathlist = process.argv[1].split('/');
-    return pathlist[pathlist.length - 1];
+    return pathlist[pathlist.length - 1].replace('.js','');
 };
 var modelmap = {
     'default': munin.Model.Default,
