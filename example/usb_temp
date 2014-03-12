@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+var child_process = require('child_process');                                                                                                
+var munin = require('../');
+var main = function(){
+    child_process.exec('/usr/local/bin/temper', function(err, stdout, stderr){
+        if(err){
+            return;
+        }
+        var g = new munin.Graph('my room temperature','temperature','room');
+        g.add(new munin.Model.Temperature('myroom').setValue(stdout.split(',')[1]));
+        g.sortValue();
+        munin.create(g);
+    });
+}
+main();
