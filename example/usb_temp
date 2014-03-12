@@ -6,7 +6,7 @@ var main = function(){
         if(err){
             return;
         }
-        var g = new munin.Graph('my room temperature','temperature','room');
+        var g = new munin.Graph('my room temperature','temperature','sensors');
         g.add(new munin.Model.Temperature('myroom').setValue(stdout.split(',')[1]));
         g.sortValue();
         munin.create(g);
