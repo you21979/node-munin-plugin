@@ -5,9 +5,18 @@ var getName = function(workername){
     return os.hostname() + "-" + workername;
 }
 var http = require('http');
+var work = {
+  recvcount : 0,
+  sendcount : 0,
+  errorcount : 0,
+};
 var server = http.createServer(function (req, res) {
+  ++work.recvcount;
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('ok');
+  res.end('ok', function(err){
+    if(err) ++work.errorcount;
+    if(!err) ++work.sendcount;
+  });
 });
 server.listen(3000);
 var main = function(config){
@@ -17,6 +26,9 @@ var main = function(config){
     rcl.hset("nodejs-memoryusage-heaptotal", getName(workerename), process.memoryUsage().heapTotal);
     rcl.hset("nodejs-memoryusage-heapused", getName(workerename), process.memoryUsage().heapUsed);
     rcl.hset("nodejs-uptime", getName(workerename), process.uptime());
+    rcl.hset("nodejs-http-count-recv", getName(workerename), work.recvcount);
+    rcl.hset("nodejs-http-count-send", getName(workerename), work.sendcount);
+    rcl.hset("nodejs-http-count-error", getName(workerename), work.errorcount);
     server.getConnections(function(err, val){
         if(!err)rcl.hset("nodejs-http-connections", getName(workerename), val);
         rcl.quit(function(err){
