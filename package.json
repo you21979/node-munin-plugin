@@ -10,7 +10,8 @@
   "main": "index.js",
   "devDependencies": {
     "mocha": "",
-    "redis" : ""
+    "redis" : "",
+    "pm2-interface" : ""
   },
   "scripts": {
     "test": "mocha test/normal"
