@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+var ipm2 = require('pm2-interface')()
+var os = require('os');
+var munin = require('munin-plugin');
+
+ipm2.on('ready', function() {
+    var list = [];
+    ipm2.bus.on('process.getinfo', function(worker){
+        list.push({
+            name : os.hostname()+'.'+worker.process.pm2_env.pm_id,
+            data : worker.data.data
+        });
+    });
+    var msg = {type:"process.getinfo"};
+    ipm2.rpc.msgProcess({name:"worker", msg:msg}, function (err, res) {
+        setTimeout(function(){
+            var graphs = [];
+            var g = new munin.Graph('rss', 'bytes', 'nodejs');
+            list.forEach(function(v){
+                g.add(new munin.Model.Default(v.name).setValue(v.data.rss));
+            });
+            graphs.push(g);
+            var g = new munin.Graph('heapUsed', 'bytes', 'nodejs');
+            list.forEach(function(v){
+                g.add(new munin.Model.Default(v.name).setValue(v.data.heapUsed));
+            });
+            graphs.push(g);
+            var g = new munin.Graph('heapTotal', 'bytes', 'nodejs');
+            list.forEach(function(v){
+                g.add(new munin.Model.Default(v.name).setValue(v.data.heapTotal));
+            });
+            graphs.push(g);
+            munin.create(graphs);
+            ipm2.disconnect();
+        }, 100);
+    });
+});
