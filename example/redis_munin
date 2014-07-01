@@ -4,6 +4,7 @@ var munin = require('..');
 var main = function(config){
     var items = [
         {"key":"nodejs-uptime","unit":"seconds"},
+        {"key":"nodejs-http-connections","unit":"connections"},
         {"key":"nodejs-memoryusage-rss","unit":"bytes"},
         {"key":"nodejs-memoryusage-heaptotal","unit":"bytes"},
         {"key":"nodejs-memoryusage-heapused","unit":"bytes"}];
