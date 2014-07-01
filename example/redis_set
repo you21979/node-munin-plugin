@@ -1,15 +1,21 @@
 #!/usr/bin/env node
 var redis = require('redis');
-var munin = require('../');
-var filename = __filename.replace(__dirname+'/', '').replace('.js','');
-//var jsonfile = __dirname + '/munin-redis.json';
+var os = require('os');
+var getName = function(workername){
+    return os.hostname() + "-" + workername;
+}
 var main = function(config){
+    var workerename = 0;
     var rcl = redis.createClient(config['port'],config['host']);
-    rcl.hset("nodejs-memoryusage-rss", "localhost", process.memoryUsage().rss);
-    rcl.hset("nodejs-memoryusage-heaptotal", "localhost", process.memoryUsage().heapTotal);
-    rcl.hset("nodejs-memoryusage-heapused", "localhost", process.memoryUsage().heapUsed);
-    rcl.hset("nodejs-uptime", "localhost", process.uptime());
+    rcl.hset("nodejs-memoryusage-rss", getName(workerename), process.memoryUsage().rss);
+    rcl.hset("nodejs-memoryusage-heaptotal", getName(workerename), process.memoryUsage().heapTotal);
+    rcl.hset("nodejs-memoryusage-heapused", getName(workerename), process.memoryUsage().heapUsed);
+    rcl.hset("nodejs-uptime", getName(workerename), process.uptime());
     rcl.quit(function(err){
     });
 }
-main({ host:'localhost', port:'6379' });
+var update = function(){
+    main({ host:'localhost', port:'6379' });
+    setTimeout(update, 1000);
+}
+update();
