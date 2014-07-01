@@ -4,7 +4,7 @@ var monitor_init = function(){
         if ( "type" in msg && msg.type === "process.getinfo" ) {
             switch(msg.type){
             case "process.getinfo":
-                process.send({type:msg.type, data:process.memoryUsage()});
+                process.send({type:msg.type, memory:process.memoryUsage()});
                 break;
             default:
                 break;
@@ -12,6 +12,8 @@ var monitor_init = function(){
         }
     });
 }
+
+monitor_init();
 
 setInterval( function () {
   var object = {}

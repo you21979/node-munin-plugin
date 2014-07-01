@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 var ipm2 = require('pm2-interface')()
 var os = require('os');
-var munin = require('munin-plugin');
+var munin = require('..');
 
 ipm2.on('ready', function() {
     var list = [];
     ipm2.bus.on('process.getinfo', function(worker){
         list.push({
             name : os.hostname()+'.'+worker.process.pm2_env.pm_id,
-            data : worker.data.data
+            data : worker.data.memory
         });
     });
     var msg = {type:"process.getinfo"};
