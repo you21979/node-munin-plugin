@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+var redis = require('redis');
+var munin = require('..');
+var main = function(config){
+    var items = [
+        {"key":"nodejs-uptime","unit":"seconds"},
+        {"key":"nodejs-memoryusage-rss","unit":"bytes"},
+        {"key":"nodejs-memoryusage-heaptotal","unit":"bytes"},
+        {"key":"nodejs-memoryusage-heapused","unit":"bytes"}];
+    var graphs = [];
+
+    var rcl = redis.createClient(config['port'],config['host']);
+    items.forEach(function(item){
+        rcl.hgetall(item.key, function(err, val){
+            var g = new munin.Graph(item.key , item.unit,'nodejs');
+            Object.keys(val).forEach(function(k){
+                g.add(new munin.Model.Default(k).setValue(val[k]));
+            });
+            graphs.push(g);
+        });
+    });
+    rcl.quit(function(err){
+        munin.create(graphs);
+    });
+}
+main({ host:'localhost', port:'6379' });
